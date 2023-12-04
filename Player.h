@@ -13,27 +13,30 @@ class Player
     public:
         enum Dir {STOP, UP, LEFT, DOWN, RIGHT};  // This is the direction state
 
-        Player(GameMechs* thisGMRef, Food* thisFoodRef);
+        Player(GameMechs *thisGMRef, Food *thisFoodRef);
         ~Player();
 
-        objPosArrayList* getPlayerPos();
+        // Player position stuff; get and update direction, get position.
+        objPosArrayList *getPlayerPos();
         void updatePlayerDir();
-        void movePlayer();
         int getDir();
 
+        // To move or to eat? That is the question. (Read the comments on each function within Player.cpp for more details)
+        void handleFoodAndMovement(int lengthGain);
         bool isFoodConsumed(int &lengthGain);
-        void increasePlayerLength(int weightGain);
+        void increasePlayerLength(int lengthGain);
+        void movePlayer();
 
     private:
-        objPosArrayList* playerPosList;      
+        objPosArrayList *playerPosList;      
         enum Dir myDir;
         
         void advanceObjectPos(objPos &obj);
-        bool IsSnakeSucidal(objPos& nextHeadPos);
+        bool IsSnakeSucidal(objPos &nextHeadPos);
 
         // To refer to GameMechs and Food
-        GameMechs* mainGameMechsRef;
-        Food* mainFoodRef;
+        GameMechs *mainGameMechsRef;
+        Food *mainFoodRef;
 };
 
 #endif

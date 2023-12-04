@@ -60,12 +60,7 @@ void RunLogic(void)
     int lengthGain;
     foodMechs->generateFood(gameMechs, playerMechs->getPlayerPos());
     playerMechs->updatePlayerDir();
-    if (playerMechs->isFoodConsumed(lengthGain)) {
-        playerMechs->increasePlayerLength(lengthGain);
-    }
-    else {
-        playerMechs->movePlayer();
-    }
+    playerMechs->handleFoodAndMovement(lengthGain);
     gameMechs->endGame();
     gameMechs->clearInput();
 }
@@ -106,8 +101,6 @@ void DrawScreen(void)
     }
 
     // Assigns food to board
-    // FOR LATER: Printing more food will require a setup similar to the snake
-    //            objPosArrayList* foodPosList
     if (foodMechs != nullptr) {
         for (i = 0; i < foodMechs->foodCount(); i++){
             objPos f;
@@ -126,8 +119,7 @@ void DrawScreen(void)
 
     // END
 
-    MacUILib_printf("Direction: %s\nScore: %d\n",
-                     directionText[playerMechs->getDir()], gameMechs->getScore());
+    MacUILib_printf("Direction: %s\nScore: %d\n", directionText[playerMechs->getDir()], gameMechs->getScore());
 }
 
 void LoopDelay(void)

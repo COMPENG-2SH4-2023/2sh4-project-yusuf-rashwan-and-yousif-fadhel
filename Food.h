@@ -28,21 +28,16 @@ class Player;
 class Food
 {
     private:
-        objPosArrayList* foodBucket;
+        objPosArrayList *foodBucket;
 
     public:
-        Food(GameMechs* thisGMRef, Player* thisPLRef);
+        Food(GameMechs *thisGMRef, Player *thisPLRef);
         ~Food();
         
-        void generateFood(GameMechs* thisGMRef, objPosArrayList *blockOff);
+        int foodCount();
         void getFoodPos(objPos &returnPos, int foodIndex);
-        void consumeFood(int foodIndex, int& score, int& lengthGain);
-        int foodCount() { 
-             if (foodBucket == nullptr) {
-                return 0;
-             }
-             return foodBucket->getSize();
-        };
+        void generateFood(GameMechs *thisGMRef, objPosArrayList *blockOff);
+        void consumeFood(int foodIndex, int &score, int &lengthGain);
 };
 
 #endif

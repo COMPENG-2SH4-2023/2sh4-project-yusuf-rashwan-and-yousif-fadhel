@@ -1,10 +1,8 @@
 #include "Food.h"
-#include <iostream>
 
 Food::Food(GameMechs* thisGMRef, Player* thisPLRef)
 {
     foodBucket = new objPosArrayList();
-    // foodPos.setObjPos(-1, -1, 'O'); // Initialize food outside of the game board (not displayed).
 }
 
 Food::~Food()
@@ -13,6 +11,23 @@ Food::~Food()
     foodBucket = nullptr;
 }
 
+int Food::foodCount()
+{
+    if (foodBucket == nullptr) {
+        return 0;
+    }
+    
+    return foodBucket->getSize();
+}
+
+void Food::getFoodPos(objPos &returnPos, int foodIndex)
+{
+    if ((foodIndex >= 0) && (foodIndex < foodBucket->getSize())){
+        foodBucket->getElement(returnPos, foodIndex);
+    }
+}
+
+// What a function this one is! Hope the comments are enough ☺.
 void Food::generateFood(GameMechs* thisGMRef, objPosArrayList *blockOff)
 {
     srand(time(NULL));
@@ -61,21 +76,16 @@ void Food::generateFood(GameMechs* thisGMRef, objPosArrayList *blockOff)
             if (specialFood1 && generateRandomSpecialFood) {
                specialFood1 = false;
                newFoodPos.symbol = SPECIAL_FOOD_KIND1;
-            } else if (specialFood2 && generateRandomSpecialFood) {
+            }
+            else if (specialFood2 && generateRandomSpecialFood) {
                specialFood2 = false;
                newFoodPos.symbol = SPECIAL_FOOD_KIND2;
-            } else {
+            }
+            else {
               newFoodPos.symbol = DEFAULT_FOOD_KIND;
             }
             foodBucket->insertHead(newFoodPos);
         }
-    }
-}
-
-void Food::getFoodPos(objPos &returnPos, int foodIndex)
-{
-    if ((foodIndex >= 0) && (foodIndex < foodBucket->getSize())){
-        foodBucket->getElement(returnPos, foodIndex);
     }
 }
 
@@ -103,7 +113,7 @@ void Food::consumeFood(int foodIndex, int& score, int& lengthGain)
         }
         // We need to remove the consumed food from our food bucket.
         // Once all foods in the bucket are consumed, a new batch will be generated.
-        for (int i = foodIndex; i < foodBucket->getSize() - 1; i++){
+        for (int i = foodIndex; i < foodBucket->getSize() - 1; i++) {
             foodBucket->getElement(food, i+1);
             foodBucket->setElement(food, i);
         }

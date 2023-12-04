@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(GameMechs* thisGMRef, Food* thisFoodRef)
+Player::Player(GameMechs *thisGMRef, Food *thisFoodRef)
 {
     playerPosList = new objPosArrayList();
     mainGameMechsRef = thisGMRef;
@@ -19,7 +19,7 @@ Player::~Player()
     playerPosList = nullptr;
 }
 
-objPosArrayList* Player::getPlayerPos()
+objPosArrayList *Player::getPlayerPos()
 {
     return playerPosList;
 }
@@ -52,84 +52,20 @@ void Player::updatePlayerDir()
     }
 }
 
-bool Player::IsSnakeSucidal(objPos& nextheadPos) {
-    // Check if the snake's head moving or addition would cause collision with its body.
-    objPos e;
-    for (int i = playerPosList->getSize() - 1; i > 0; i--) {
-        playerPosList->getElement(e, i);
-        if ((nextheadPos.x == e.x) && (nextheadPos.y == e.y)) {
-            mainGameMechsRef->setLoseTrue();
-
-            return true;
-        }
-    }
-
-    return false;
-}
-
-void Player::movePlayer()
-{
-    objPos o;
-    // Move body parts (except head) to be aligned with the previous ones.
-    for (int i = playerPosList->getSize() - 1; i > 0; i--) {
-        playerPosList->getElement(o, i - 1);
-        playerPosList->setElement(o, i);
-    }
-
-    // Prepare moving the head according to the commanded input direction .
-    playerPosList->getHeadElement(o);
-    advanceObjectPos(o);
-
-    if (!IsSnakeSucidal(o)) {
-        // At this stage, the snake's head could move without being sucidal.
-        // Move the head according to the commanded input direction 
-        playerPosList->setElement(o, 0);
-    }
-}
-
 int Player::getDir()
 {
     // Gets the current direction for printing on screen.
     return myDir;
 }
 
-void Player::advanceObjectPos(objPos &obj) {
-    // This would advance the player body part object to the commanded direction.
-    switch (myDir) {
-        case UP:
-            if (obj.y == 1) {
-                obj.y = BOARD_SIZE_Y - 2;
-            }
-            else {
-                obj.y--;
-            }
-            break;
-        case DOWN:
-            if (obj.y == BOARD_SIZE_Y - 2) {
-                obj.y = 1;
-            }
-            else {
-                obj.y++;
-            }
-            break;
-        case LEFT:
-            if (obj.x == 1) {
-                obj.x = BOARD_SIZE_X - 2;
-            }
-            else {
-                obj.x--;
-            }
-            break;
-        case RIGHT:
-            if (obj.x == BOARD_SIZE_X - 2) {
-                obj.x= 1;
-            }
-            else {
-                obj.x++;
-            }
-            break;
-        default:
-            break;
+// This function should be self-evident.
+void Player::handleFoodAndMovement(int lengthGain)
+{
+    if (isFoodConsumed(lengthGain)) {
+        increasePlayerLength(lengthGain);
+    }
+    else {
+        movePlayer();
     }
 }
 
@@ -187,4 +123,81 @@ void Player::increasePlayerLength(int lengthGain)
         }
 
     } while (lengthGain > 0);
+}
+
+void Player::movePlayer()
+{
+    objPos o;
+    // Move body parts (except head) to be aligned with the previous ones.
+    for (int i = playerPosList->getSize() - 1; i > 0; i--) {
+        playerPosList->getElement(o, i - 1);
+        playerPosList->setElement(o, i);
+    }
+
+    // Prepare moving the head according to the commanded input direction .
+    playerPosList->getHeadElement(o);
+    advanceObjectPos(o);
+
+    if (!IsSnakeSucidal(o)) {
+        // At this stage, the snake's head could move without being sucidal.
+        // Move the head according to the commanded input direction 
+        playerPosList->setElement(o, 0);
+    }
+}
+
+// PRIVATE FUNCTIONS
+
+void Player::advanceObjectPos(objPos &obj) {
+    // This would advance the player body part object to the commanded direction.
+    switch (myDir) {
+        case UP:
+            if (obj.y == 1) {
+                obj.y = BOARD_SIZE_Y - 2;
+            }
+            else {
+                obj.y--;
+            }
+            break;
+        case DOWN:
+            if (obj.y == BOARD_SIZE_Y - 2) {
+                obj.y = 1;
+            }
+            else {
+                obj.y++;
+            }
+            break;
+        case LEFT:
+            if (obj.x == 1) {
+                obj.x = BOARD_SIZE_X - 2;
+            }
+            else {
+                obj.x--;
+            }
+            break;
+        case RIGHT:
+            if (obj.x == BOARD_SIZE_X - 2) {
+                obj.x= 1;
+            }
+            else {
+                obj.x++;
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+bool Player::IsSnakeSucidal(objPos &nextheadPos) {
+    // Check if the snake's head moving or addition would cause collision with its body.
+    objPos e;
+    for (int i = playerPosList->getSize() - 1; i > 0; i--) {
+        playerPosList->getElement(e, i);
+        if ((nextheadPos.x == e.x) && (nextheadPos.y == e.y)) {
+            mainGameMechsRef->setLoseTrue();
+
+            return true;
+        }
+    }
+
+    return false;
 }

@@ -1,7 +1,7 @@
 #include "GameMechs.h"
 #include "MacUILib.h"
 
-GameMechs::GameMechs() // Default constuctor; not used and will probably not be.
+GameMechs::GameMechs() // Default constuctor; not used.
 {
     input = 0;
     score = 0;
@@ -23,9 +23,7 @@ GameMechs::GameMechs(int boardX, int boardY)
     boardSizeY = boardY;
 }
 
-// do you need a destructor?
-
-
+// No need to define a destructor.
 
 int GameMechs::getBoardSizeX()
 {
@@ -42,6 +40,11 @@ char GameMechs::getInput()
     return input;
 }
 
+void GameMechs::setInput(char this_input)
+{
+   input = this_input;
+}
+
 void GameMechs::clearInput()
 {
     input = 0;
@@ -49,7 +52,7 @@ void GameMechs::clearInput()
 
 void GameMechs::incrementScore()
 {
-    incrementScore(1);
+    incrementScore(1); // Default points earned is set to 1.
 }
 
 void GameMechs::incrementScore(int scoreToAdd)
@@ -70,7 +73,6 @@ int GameMechs::getScore()
         If exit is true, game ends and prints exiting message.
         When lose is true, game ends and prints losing message.
         In both cases, the score is printed.
-
 */
 
 bool GameMechs::getExitFlagStatus()
@@ -78,14 +80,14 @@ bool GameMechs::getExitFlagStatus()
     return exitFlag;
 }
 
-bool GameMechs::getLoseFlagStatus()
-{
-    return loseFlag;
-}
-
 void GameMechs::setExitTrue()
 {
     exitFlag = true;
+}
+
+bool GameMechs::getLoseFlagStatus()
+{
+    return loseFlag;
 }
 
 void GameMechs::setLoseTrue()
@@ -95,19 +97,17 @@ void GameMechs::setLoseTrue()
 
 void GameMechs::endGame()
 {
-    if (input == ESC_KEY)
+    if (input == ESC_KEY) {
         GameMechs::setExitTrue();
+    }
 }
 
 void GameMechs::endMessage()
 {
-    if (getExitFlagStatus())
+    if (getExitFlagStatus()) {
         MacUILib_printf("User has manually ended the game. Your score was: %d.\n", getScore());
-    else if(getLoseFlagStatus())
+    }
+    else if(getLoseFlagStatus()) {
         MacUILib_printf("Don't kill yourself... Your score was: %d.\n", getScore());
-}
-
-void GameMechs::setInput(char this_input)
-{
-   input = this_input;
+    }
 }

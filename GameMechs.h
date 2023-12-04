@@ -34,22 +34,22 @@ class GameMechs
         GameMechs();
         GameMechs(int boardX, int boardY);
         
-        bool getExitFlagStatus();
-        void setExitTrue();
-        bool getLoseFlagStatus();
-        void setLoseTrue();
+        int getBoardSizeX();
+        int getBoardSizeY();
 
         char getInput();
         void setInput(char this_input);
         void clearInput();
 
-        int getBoardSizeX();
-        int getBoardSizeY();
-
         void incrementScore();
         void incrementScore(int scoreToAdd);
         int getScore();
-      
+
+        bool getExitFlagStatus();
+        void setExitTrue();
+        bool getLoseFlagStatus();
+        void setLoseTrue();
+
         void endGame();
         void endMessage();
 };
